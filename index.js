@@ -56,3 +56,43 @@ function init() {
         });
     }
    
+    function viewAllDepartments() {
+        Queries.viewAllDepartments().then(([rows]) => {
+            let departments = rows;
+            console.table(departments);
+            askPromptQuestions();
+        });
+    }
+    
+    function viewAllRoles() {
+        Queries.viewAllRoles().then(([rows]) => {
+            let roles = rows;
+            console.table(rows);
+            askPromptQuestions();
+        });
+    }
+
+    function viewAllEmployees() {
+        Queries.viewAllEmployees().then(([rows]) => {
+            let employees = rows;
+            console.table(employees);
+        })
+        .then(() => askPromptQuestions());
+    }
+
+    function addDepartment() {
+        inquirer.prompt([
+            {
+                name: "departmentName",
+                message: "What is the name of the department?",
+                type: "input",
+            },
+        ])
+        .then((answers) => {
+            Queries.addDepartment(answers.departmentName)
+            .then(response) => { 
+                console.log (`Added ${answers.departmentName}`);
+                askPromptQuestions();
+            }
+        })
+    }
