@@ -16,7 +16,7 @@ const choices = [
             "add an employee",
             "update an employee role",
             "Restart",
-        ];
+        ],
         name: "choiceSelection",
     },
 ];
@@ -196,7 +196,7 @@ function init() {
             });
             
     }
-    
+
     function updateEmployeeRole() {
         Queries.viewAllEmployees().then(([employees]) => {
             const employeeArray = employees.map(({ id, first_name, last_name}) => {
