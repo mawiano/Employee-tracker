@@ -196,4 +196,47 @@ function init() {
             });
             
     }
-    
+    function updateEmployeeRole() {
+        Queries.viewAllEmployees().then(([employees]) => {
+            const employeeArray = employees.map(({ id, first_name, last_name}) => {
+                return {
+                    name: `${first_name} ${last_name}`,
+                    value: id,
+                };
+            });
+            inquirer.prompt([
+                {
+                    type: "list",
+                    name: "employeeId",
+                    message: "Which employee role would you like to update?",
+                    options: employeeArray,
+                },
+            ])
+            .then(({ employeeId }) => {
+                Queries.viewAllRoles().then(([roles]) => {
+                    const roleArray = roles.map(({ id, title}) => {
+                        return {
+                            name: title,
+                            value: id,
+                        };
+                    });
+                    inquirer.prompt(([
+                        {
+                            type: "list",
+                            name: "roleId",
+                            message: "Which role would you like to update the employee to?",
+                            options: roleArray,
+                        },
+                    ])
+                    .then(({ roleId}) => {
+                        Queries.updateEmployeeRole(employeeId, roleId)
+                        .then(() => console.log("updated employees role"))
+                        .then(() => askPromptQuestions());
+                    })
+                    )
+                })
+            })
+        })
+    }
+
+    init();
