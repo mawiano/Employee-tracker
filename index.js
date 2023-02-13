@@ -90,9 +90,57 @@ function init() {
         ])
         .then((answers) => {
             Queries.addDepartment(answers.departmentName)
-            .then(response) => { 
+            .then((response) => { 
                 console.log (`Added ${answers.departmentName}`);
                 askPromptQuestions();
-            }
-        })
+            })
+            .catch((error) => {
+                console.log(error);
+                askPromptQuestions;
+            });
+        });
     }
+
+    function addRole() {
+        Queries.viewAllDepartments().then(([rows]) => {
+            let department = rows;
+            const departmentChoices = department.map(({id, name}) => {
+                return{
+                    name: `${name}`,
+                    value: id,
+                }
+            });
+
+            inquirer.prompt([
+                {
+                    name: "title",
+                    message: "What is the name of the role?",
+                    type: "input",
+                },
+                {
+                    name: "salary",
+                    message: "What is the salary of the role?",
+                    type: "input",
+                },
+                {
+                    name: "list",
+                    message: "What department does the role belong to?",
+                    type: departmentChoices,
+                },
+            ])
+
+            .then((answers) => {
+                Queries.addRole(answers.title, answers.salary, answers.department_id)
+                .then((response) => {
+                    console.log(`Added Role to the database`);
+                    askPromptQuestions();
+                })
+                .catch((error) => {
+                    console.log(error);
+                    askPromptQuestions();
+                });
+            });
+        })
+    };
+
+    
