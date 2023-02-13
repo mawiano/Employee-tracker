@@ -44,7 +44,7 @@ function init() {
             if(answers.choiceSelection === "add a role") {
                 addRole();
             }
-            if(answers.choiceSelection === "dd an employee") {
+            if(answers.choiceSelection === "add an employee") {
                 addEmployee();
             }
             if(answers.choiceSelection === "update an employee role") {
@@ -67,7 +67,7 @@ function init() {
     function viewAllRoles() {
         Queries.viewAllRoles().then(([rows]) => {
             let roles = rows;
-            console.table(rows);
+            console.table(roles);
             askPromptQuestions();
         });
     }
@@ -143,4 +143,57 @@ function init() {
         })
     };
 
+    function addEmployee() {
+        Queries.viewAllRoles().then(([rows]) => {
+            let role = rows;
+            const roleOptions = role.map(({ id, title}) => {
+                return {
+                    name: `${title}`,
+                    value: id,
+                }
+            })
+            Queries.viewManager().then(([rows]) => {
+                let manager = rows;
+                const managerOptions = manager.map(({ id, first_name, last_name}) => {
+                    return {
+                        name: `${first_name} ${last_name}`,
+                        value: id,
+                    }
+                })
+                const employee = [
+                    {
+                        name: "firstName",
+                        message: "What is the employee's first name?",
+                        type: "input",
+                    },
+                    {
+                        name: "lastName",
+                        message: "What is the employee's last name?",
+                        type: "input",
+                    },
+                    {
+                        name: "role",
+                        message: "What is the employee's role?",
+                        type: "roleOptions",
+                        options: roleOptions
+                    },
+                    {
+                        name: "manager",
+                        message: "Who is the employees manager?",
+                        type: "list",
+                        options: managerOptions
+                    },
+                ];
+    
+                inquirer.prompt(employee).then((answers) => {
+                    Queries.addEmployee(answers.firstName, answers.lastName, answers.role, answers.manager)
+                    .then((response) => {
+                        console.log(`Added employee`);
+                        askPromptQuestions();
+                    });
+                })
+            })
+            });
+            
+    }
     
