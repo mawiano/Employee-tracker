@@ -38,4 +38,12 @@ class Queries {
         .promise()
         .query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)", [first_name, last_name, role, manager]);
     }
+
+    updateEmployeeRole(employeeId, roleId) {
+        return this.connection().query("UPDATE employee SET role_id = ? WHERE employee.id = ?", [roleId, employeeId]);
+    }
+    viewManager() {
+        return this.connection.promise().query("SELECT * FROM employee WHERE manager_id is null")
+    }
 }
+module.exports = new Queries(connection); 
