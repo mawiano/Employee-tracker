@@ -1,13 +1,13 @@
 const inquirer = require("inquirer");
 const consoleTable = require("console.table");
-const Queries = require ("/Queries");
+const Queries = require ("./Queries");
 
 // Initial questions array 
 const choices = [
     {
         type: "list",
         message: "What would you like to do?",
-        options: [
+        choices: [
             "view all departments",
             "view all roles",
             "view all employees",
@@ -123,9 +123,10 @@ function init() {
                     type: "input",
                 },
                 {
-                    name: "list",
+                    name: "department_id",
                     message: "What department does the role belong to?",
-                    type: departmentChoices,
+                    type: "list",
+                    choices: departmentChoices,
                 },
             ])
 
@@ -174,14 +175,14 @@ function init() {
                     {
                         name: "role",
                         message: "What is the employee's role?",
-                        type: "roleOptions",
-                        options: roleOptions
+                        type: "list",
+                        choices: roleOptions
                     },
                     {
                         name: "manager",
                         message: "Who is the employees manager?",
                         type: "list",
-                        options: managerOptions
+                        choices: managerOptions
                     },
                 ];
     
@@ -210,7 +211,7 @@ function init() {
                     type: "list",
                     name: "employeeId",
                     message: "Which employee role would you like to update?",
-                    options: employeeArray,
+                    choices: employeeArray,
                 },
             ])
             .then(({ employeeId }) => {
@@ -226,7 +227,7 @@ function init() {
                             type: "list",
                             name: "roleId",
                             message: "Which role would you like to update the employee to?",
-                            options: roleArray,
+                            choices: roleArray,
                         },
                     ])
                     .then(({ roleId}) => {
